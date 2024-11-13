@@ -1,0 +1,104 @@
+/* پس‌زمینه */
+body {
+  font-family: 'Vazir', sans-serif;
+  background: radial-gradient(circle, #2e3b55, #1c2331);
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+/* استایل کارت */
+.card {
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* هدر کارت */
+.card-header {
+  background: linear-gradient(135deg, #6d83f7, #485ac7);
+  border-bottom: none;
+  color: #ffffff;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+/* بدنه کارت */
+.card-body {
+  padding: 2.5rem;
+}
+
+/* استایل فرم‌ها */
+.form-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #6d83f7;
+  box-shadow: 0 5px 15px rgba(109, 131, 247, 0.3);
+}
+
+/* دکمه‌ها */
+.btn-primary {
+  background-color: #6d83f7;
+  border-color: #6d83f7;
+  border-radius: 10px;
+  padding: 0.75rem;
+  transition: background-color 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 5px 15px rgba(109, 131, 247, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #485ac7;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(109, 131, 247, 0.5);
+}
+
+/* فوتر کارت */
+.card-footer {
+  background-color: #f7f7f7;
+  padding: 1rem;
+  text-align: center;
+  border-top: none;
+  color: #333;
+}
+
+.card-footer a {
+  color: #6d83f7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.card-footer a:hover {
+  color: #485ac7;
+  text-shadow: 0 3px 8px rgba(109, 131, 247, 0.5);
+}
+
+@media (max-width: 576px) {
+  .card {
+      width: 100%;
+      margin: 1rem;
+  }
+}

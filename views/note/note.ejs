@@ -1,0 +1,76 @@
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note App</title>
+
+    <link rel="icon" type="image/x-icon" href="/uploads/site/icon.png" />
+    <link rel="stylesheet" href="/css/note.css">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release-pro/v4.0.0/css/line.css">
+</head>
+
+<body>
+
+    
+
+    <ul class="error-box"></ul> <!--response box-->
+
+    <div class="popup-box">
+
+        <div class="popup show">
+            <div class="content">
+                <header>
+                    <p> افزودن یادداشت </p>
+                    <i class="uil uil-times"></i>
+                </header>
+                <form action="#">
+                    <div class="row tile">
+                        <label> عنوان </label>
+                        <input type="text" id="input">
+                    </div>
+                    <div class="row description">
+                        <label for=""> توضیحات </label>
+                        <textarea name="" id=""></textarea>
+                    </div>
+                    <button class="add-note"> افزودن </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <li class="add-box">
+            <div class="icon"><i class="uil uil-plus"></i></div>
+            <p> یادداشت جدید </p>
+
+            <% notes.forEach((note)=>{ %> 
+                <li class="note">
+                    <div class="details">
+                        <p><%=note.title %></p>
+                        <span><%=note.content %></span>
+                    </div>
+                    <div class="bottom-content">
+                        <span><%=new Intl.DateTimeFormat("fa-IR").format(note.date).toString() %></span>
+                        <div class="settings">
+                          <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
+                          <ul class="menu">
+                             <li onclick="updateNote('<%=note.id %>', '<%=note.title %>', '<%=note.content %>')"><i class="uil uil-pen"></i>  ویرایش </li>
+                              <li onclick="deleteNote('<%=note.id %>')"><i class="uil uil-trash"></i> حذف </li>
+                          </ul>
+                      </div>
+                    </div>
+                </li>
+            <% }) %> 
+        </li>
+
+
+
+
+
+    </div>
+    <script defer src="/js/note/note.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, 
+                   initial-scale=1.0">
+    <title>Note App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="/uploads/site/icon.png" type="image/x-icon">
+    <link href="/library/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="/css/admin/panel_admin.css" rel="stylesheet" />
+    <link href="/css/admin/users.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="responsive.css">
+</head>
+
+<body>
+
+
+
+    <div class="main-container">
+        <%- include("menu") -%>
+        <div class="main">
+
+            <div class="searchbar2">
+                <input type="text" name="" id="" placeholder="Search">
+                <div class="searchbtn">
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                        class="icn srchicn" alt="search-button">
+                </div>
+            </div>
+
+            <div class="box-container"></div>
+
+
+            <div class="report-container">
+
+                <div class="container mt-5">
+                    <div class="card shadow-lg rounded-4">
+                        <div
+                            class="card-header bg-primary text-white rounded-top d-flex justify-content-between align-items-center">
+                            <h2 class="text-center mb-0 logo text-center">لیست کاربران</h2>
+                            <button class="btn btn-success btn-sm me-2" data-bs-toggle="modal"
+                                data-bs-target="#addingModal">
+                                <i class="fa-solid fa-plus"></i> افزودن کاربر
+                            </button>
+                        </div>
+                        <div class="card-body p-4">
+                            <table class="table table-hover table-striped align-middle text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>عکس پروفایل</th>
+                                        <th>نام</th>
+                                        <th>ایمیل</th>
+                                        <th>نقش کاربر</th>
+                                        <th>شماره تلفن</th>
+                                        <th> تاریخ عضویت</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% users.forEach(user=> { %>
+                                        <tr>
+                                            <td>
+                                                <div class="profile-img-container">
+                                                    <img src="<%= user.img %>" alt="Profile Image" class="profile-img">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <%= user.name %>
+                                            </td>
+                                            <td>
+                                                <%= user.email %>
+                                            </td>
+                                            <td>
+                                                <% if(user.role==="admin" ) { %>
+                                                    <span class='badge bg-info text-dark'>مدیر</span>
+                                                    <% } else{%>
+                                                        <span class='badge bg-secondary'>کاربر</span>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <%= user.phone %>
+                                            </td>
+
+                                            <td>
+                                                <%= new Intl.DateTimeFormat("fa-IR").format(user.createdAt).toString()
+                                                    %>
+                                            </td>
+
+                                            <td>
+                                                <% if(user.role!=="admin" ) { %>
+                                                    <button class="btn btn-warning btn-sm me-2" data-bs-toggle="modal"
+                                                        data-bs-target="#editModal"
+                                                        onclick="editUser('<%= user.id %>','<%= user.name %>','<%= user.phone %>')">
+                                                        <i class="fas fa-edit"></i> ویرایش
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm"
+                                                        onclick="usermDelete('<%= user.id %>','<%= user.name %>')">
+                                                        <i class="fas fa-trash-alt"></i> حذف
+                                                    </button>
+                                                    <% } else{%>
+                                                        <button class="btn btn-warning btn-sm me-2"
+                                                            data-bs-toggle="modal">
+                                                            <i class="fas fa-edit"></i>
+                                                            <a style="color: #fff; text-decoration: none;"
+                                                                href="/user/update-info">
+                                                                ویرایش </a>
+                                                        </button>
+                                                        <% } %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal add -->
+                <div class="modal fade" id="addingModal" tabindex="-1" aria-labelledby="editModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4 shadow-lg">
+                            <div class="modal-header">
+
+                                <h5 class="modal-title" id="editModalLabel">افزودن کاربر</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="بستن"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="name-input" class="form-label">نام</label>
+                                        <input type="text" class="form-control" id="name-input" placeholder="نام کاربر">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">ایمیل</label>
+                                        <input type="email" class="form-control" id="email-input"
+                                            placeholder="ایمیل کاربر">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone-input" class="form-label">شماره تلفن</label>
+                                        <input type="tel" class="form-control" id="phone-input"
+                                            placeholder="شماره تلفن کاربر">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password-input" class="form-label"> رمز عبور </label>
+                                        <input type="text" class="form-control" id="password-input"
+                                            placeholder="رمز عبور خود را وارد کنید">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="repetitive-password-input" class="form-label"> تأیید رمز عبور
+                                        </label>
+                                        <input type="text" class="form-control" id="repetitive-password-input"
+                                            placeholder="رمز عبور خود را مجدداً وارد کنید">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">ذخیره کاربر</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal edit password -->
+                <div class="modal fade" id="editModalPassword" tabindex="-1" aria-labelledby="editModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4 shadow-lg">
+                            <div class="modal-header">
+
+                                <h5 class="modal-title" id="editModalLabel">ویرایش رمز عبور</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="بستن"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editForm" enctype="multipart/form-data">
+
+
+                                    <div class="mb-3">
+                                        <label for="password-input" class="form-label">رمز جدید</label>
+                                        <input type="text" class="form-control" id="password-input"
+                                            placeholder="رمز جدید">
+                                    </div>
+
+
+                                    <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-warning  w-48 m-1" data-bs-toggle="modal"
+                                            data-bs-target="#editImgModal"> ویرایش عکس </button>
+                                        <button type="button" class="btn btn-danger  w-48 m-1" data-bs-toggle="modal"
+                                            data-bs-target="#editModal"> ویرایش اطلاعات </button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal edit -->
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4 shadow-lg">
+                            <div class="modal-header">
+
+                                <h5 class="modal-title" id="editModalLabel">ویرایش کاربر</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="بستن"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editForm" enctype="multipart/form-data">
+
+
+                                    <div class="mb-3">
+                                        <label for="name-input" class="form-label">نام</label>
+                                        <input type="text" class="form-control" id="name-input" placeholder="نام کاربر">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone-input" class="form-label">شماره تلفن</label>
+                                        <input type="tel" class="form-control" id="phone-input"
+                                            placeholder="شماره تلفن کاربر">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-warning  w-48 m-1" data-bs-toggle="modal"
+                                            data-bs-target="#editImgModal"> ویرایش عکس </button>
+                                        <button type="button" class="btn btn-danger  w-48 m-1" data-bs-toggle="modal"
+                                            data-bs-target="#editModalPassword"> ویرایش رمز </button>
+
+
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal edit profile -->
+                <div class="modal fade" id="editImgModal" tabindex="-1" aria-labelledby="editModalLabel" -->
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4 shadow-lg">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">ویرایش دسته‌بندی</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="بستن"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="categoryImage" class="form-label">عکس دسته‌بندی</label>
+                                        <input type="file" class="form-control" id="categoryImage" accept="image/*">
+                                    </div>
+
+                                    <button type="button" class="btn btn-warning  w-48 m-1" data-bs-toggle="modal"
+                                        data-bs-target="#editModal"> ویرایش اطلاعات </button>
+                                    <button type="button" class="btn btn-danger  w-48 m-1" data-bs-toggle="modal"
+                                        data-bs-target="#editModalPassword"> ویرایش رمز </button>
+
+
+                                    <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script defer src="/library/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/admin/users.js" defer></script>
+</body>
+
+</html>
